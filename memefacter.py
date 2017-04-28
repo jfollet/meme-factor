@@ -1,3 +1,6 @@
+import requests
+
+
 """
 A Mashup that takes "facts" from http://www.unkno.com/ and adds them
 to memes using https://memegenerator.net
@@ -23,7 +26,10 @@ Questions PART 1:
 4. What are the PARAMETERS of the request? (look at the query string variable
    names following the `?` __________________________________________________
    
-   
+
+Point of interest: When you inspect the query string variables, you'll see
+that your spaces have been replaced by "%20".
+
 Given this information, you should now be able to issue your own requests to
 the meme generator server!
 
@@ -40,10 +46,14 @@ def meme_it(fact):
     HINT: You'll be issuing a GET request using the requests library,
     capturing the response object that's returned from the request,
     and then returning response.content
+
+    HINT: Remember that you can pass the query string variables as
+    a dictionary using the `params` keyword argument of requests.get
+
     """
-    
+
     return b""
-    
+
 
 def get_fact():
     """
@@ -69,16 +79,18 @@ def application(environ, start_response):
             raise NameError
         body = process(path)
         status = "200 OK"
-    except NameError:
+    except NameError as e:
         status = "404 Not Found"
-        body = "<h1>Not Found</h1>"
+        body = "<h1>Not Found</h1>".encode()
+        body += str(e)
+        exit(1)
     except Exception:
         status = "500 Internal Server Error"
-        body = "<h1> Internal Server Error</h1>"
+        body = "<h1> Internal Server Error</h1>".encode()
     finally:
         headers.append(('Content-length', str(len(body))))
         start_response(status, headers)
-        return [body.encode('utf8')]
+        return [body]
 
 if __name__ == '__main__':
     from wsgiref.simple_server import make_server
