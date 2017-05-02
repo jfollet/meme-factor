@@ -1,4 +1,5 @@
 import requests
+from bs4 import BeautifulSoup
 
 """
 A Mashup that takes "facts" from http://www.unkno.com/ and adds them
@@ -57,7 +58,7 @@ def meme_it(fact):
         key = "text" + str(i)
         params[key] = sentence
     response = requests.get(meme_url, params=params)
-    print(response.url)
+    # print(response.url)
     return response.content
 
 
@@ -67,8 +68,13 @@ def get_fact():
     
     TODO PART 2: Make this get a fact from unkno.com
     """
+    fact_url = "http://unkno.com"
+    response = requests.get(fact_url)
+    bs = BeautifulSoup(response.text, "html5lib")
+    div_content = bs.find("div", {"id": "content"})
+    return div_content.text.strip(' \n\t')
 
-    return "Badgers are strong.\r\nYes they are..."
+    # return "Badgers are strong.\r\nYes they are..."
 
 
 def process(path):
