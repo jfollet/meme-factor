@@ -1,6 +1,5 @@
 import requests
 
-
 """
 A Mashup that takes "facts" from http://www.unkno.com/ and adds them
 to memes using https://memegenerator.net
@@ -35,6 +34,7 @@ the meme generator server!
 
 """
 
+
 def meme_it(fact):
     """
     Given a fact, mashes that fact into a Buzz Lightyear "x-x-everywhere"
@@ -51,8 +51,16 @@ def meme_it(fact):
     a dictionary using the `params` keyword argument of requests.get
 
     """
+    params = {"imageID": "7953644", "text0": fact}
+    # for i, word in enumerate(fact.split()):
+    #     key = "text" + str(i)
+    #     params[key] = word
+    # meme_url = "https://cdn.meme.am/Instance/Preview?imageID=7953644&text0=This%20is&text1="
+    meme_url = "https://cdn.meme.am/Instance/Preview"
 
-    return b""
+    response = requests.get(meme_url, params=params)
+    print(response.url)
+    return response.content
 
 
 def get_fact():
@@ -61,15 +69,16 @@ def get_fact():
     
     TODO PART 2: Make this get a fact from unkno.com
     """
-    
+
     return "Badgers are strong."
 
 
 def process(path):
     fact = get_fact()
     meme = meme_it(fact)
-    
+
     return meme
+
 
 def application(environ, start_response):
     headers = [('Content-type', 'image/jpeg')]
@@ -92,7 +101,9 @@ def application(environ, start_response):
         start_response(status, headers)
         return [body]
 
+
 if __name__ == '__main__':
     from wsgiref.simple_server import make_server
+
     srv = make_server('localhost', 8080, application)
     srv.serve_forever()
