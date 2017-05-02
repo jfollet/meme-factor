@@ -18,12 +18,12 @@ You should see that everytime you modify the text, a request is issued.
 
 Questions PART 1:
 
-1. What is the PROTOCOL of these requests? (http vs https) ____________________
-2. What is the METHOD of these requests? (GET, POST, other?) __________________
+1. What is the PROTOCOL of these requests? (http vs https) ____https_________
+2. What is the METHOD of these requests? (GET, POST, other?) ____GET_________
 3. What is the RESOURCE of these requests? (everything between the domain and the `?`)
-   _________________________________________
+   _______Instance/Preview___________
 4. What are the PARAMETERS of the request? (look at the query string variable
-   names following the `?` __________________________________________________
+   names following the `?` ________imageID, text0______________________________
    
 
 Point of interest: When you inspect the query string variables, you'll see
@@ -41,7 +41,7 @@ def meme_it(fact):
     meme. Use https://memegenerator.net/Woody-Buzz-Everywhere/caption .
     Returns the byte-encoded image.
     
-    TODO PART 1: COMPLETE THIS FUNCITON
+    TODO PART 1: COMPLETE THIS FUNCTION
     
     HINT: You'll be issuing a GET request using the requests library,
     capturing the response object that's returned from the request,
@@ -51,13 +51,11 @@ def meme_it(fact):
     a dictionary using the `params` keyword argument of requests.get
 
     """
-    params = {"imageID": "7953644", "text0": fact}
-    # for i, word in enumerate(fact.split()):
-    #     key = "text" + str(i)
-    #     params[key] = word
-    # meme_url = "https://cdn.meme.am/Instance/Preview?imageID=7953644&text0=This%20is&text1="
     meme_url = "https://cdn.meme.am/Instance/Preview"
-
+    params = {"imageID": "7953644"}
+    for i, sentence in enumerate(fact.splitlines()):
+        key = "text" + str(i)
+        params[key] = sentence
     response = requests.get(meme_url, params=params)
     print(response.url)
     return response.content
@@ -70,7 +68,7 @@ def get_fact():
     TODO PART 2: Make this get a fact from unkno.com
     """
 
-    return "Badgers are strong."
+    return "Badgers are strong.\r\nYes they are..."
 
 
 def process(path):
