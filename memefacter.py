@@ -58,7 +58,6 @@ def meme_it(fact):
         key = "text" + str(i)
         params[key] = sentence
     response = requests.get(meme_url, params=params)
-    # print(response.url)
     return response.content
 
 
@@ -73,8 +72,6 @@ def get_fact():
     bs = BeautifulSoup(response.text, "html5lib")
     div_content = bs.find("div", {"id": "content"})
     return div_content.text.strip(' \n\t')
-
-    # return "Badgers are strong.\r\nYes they are..."
 
 
 def process(path):
